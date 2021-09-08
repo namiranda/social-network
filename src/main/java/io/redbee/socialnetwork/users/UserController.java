@@ -3,29 +3,37 @@ package io.redbee.socialnetwork.users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
-@RestController
+@RestController()
 public class UserController {
 
     @Autowired
-    private UserDao userDao;
+    private UserService userService;
 
     @GetMapping("/users")
-    public List<User> status() {
-        return userDao.get();
+    public List<User> getAllUsers() {
+        return userService.getAllUsers();
     }
 
     @PostMapping(value = "/users/new", consumes = "application/json")
-    public void create(@RequestBody User user) {
-         userDao.save(user);
+    public void createUser(@RequestBody User user) {
+         userService.createUser(user);
+    }
+
+    @GetMapping("/users/{id}")
+    public User findUser(@PathVariable Integer id) throws Exception {
+        return userService.findUserById(id);
+    }
+
+
+    @DeleteMapping("/users/delete")
+    public boolean deleteUser(int id){
+        return false;
     }
 
 
