@@ -16,8 +16,9 @@ public class UserController {
     private UserService userService;
 
     @PostMapping(value = "/users/new", consumes = "application/json")
-    public void createUser(@RequestBody User user) {
+    public ResponseEntity<User> createUser(@RequestBody User user) {
          userService.createUser(user);
+         return  ResponseEntity.status(201).body(user);
     }
 
     @GetMapping("/users/{id}")
