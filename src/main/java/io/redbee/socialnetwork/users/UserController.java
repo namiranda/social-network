@@ -15,11 +15,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/users")
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
-    }
-
     @PostMapping(value = "/users/new", consumes = "application/json")
     public void createUser(@RequestBody User user) {
          userService.createUser(user);
@@ -30,10 +25,13 @@ public class UserController {
         return userService.findUserById(id);
     }
 
-
-    @DeleteMapping("/users/delete")
-    public boolean deleteUser(int id){
-        return false;
+    @PutMapping("/users/")
+    public void updateUser(@RequestBody User user)  {
+        userService.updateUser(user);
+    }
+    @DeleteMapping("/users/{id}")
+    public void deleteUser(Integer id){
+        userService.deleteUser(id);
     }
 
 

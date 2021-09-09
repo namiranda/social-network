@@ -31,9 +31,11 @@ public class UserService {
         }
     }
 
-    public boolean deleteUser(int userId){
-      //  userDao.getById(userId).ifPresent(user-> user.getStatus());
-        return false;
+    public void updateUser(User user) {
+       userDao.update(user);
+    }
+    public void deleteUser(Integer userId){
+       // userDao.getById(userId).ifPresent(user->updateUser(user.withStatus("DELETED")));
     }
 
 
