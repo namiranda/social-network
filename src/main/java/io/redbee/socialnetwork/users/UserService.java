@@ -17,10 +17,10 @@ public class UserService {
         return userDao.get();
     }
 
-    public void createUser( User user) {
-        userDao.save(user);
-    }
 
+    public User createUser(User user) {
+        return this.userDao.save(user).orElseThrow();
+    }
 
     public User findUserById(Integer id) throws Exception {
         Optional<User> userOp = userDao.getById(id);
