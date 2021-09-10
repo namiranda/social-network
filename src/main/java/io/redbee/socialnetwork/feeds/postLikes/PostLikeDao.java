@@ -26,7 +26,7 @@ public class PostLikeDao {
 
     private static final String insertQuery = "" +
             "INSERT INTO post_likes (post_id, user_id) " +
-            "VALUES (:post_id, :user_id,) ";
+            "VALUES (:post_id, :user_id) ";
 
     private static final String deleteQuery = "" +
             "DELETE FROM post_likes " +
