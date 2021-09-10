@@ -12,7 +12,7 @@ public class PostLikeController {
     @Autowired
     PostLikeService postLikeService;
 
-    @PostMapping("/postlike/new")
+    @PostMapping("/postlike")
     void crearPostLike(@RequestBody PostLike postLike){
         postLikeService.crearPostLike(postLike);
     }

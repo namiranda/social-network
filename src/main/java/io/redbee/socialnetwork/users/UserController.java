@@ -20,7 +20,7 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @PostMapping(value = "/users/new", consumes = "application/json")
+    @PostMapping(value = "/users", consumes = "application/json")
     public ResponseEntity<User> createUser(@RequestBody User user) {
         User newUser = userService.createUser(user);
          return ResponseEntity.status(201).body(newUser);

@@ -13,7 +13,7 @@ public class PostController {
     @Autowired
     PostService postService;
 
-    @PostMapping(value = "/posts/new", consumes = "application/json")
+    @PostMapping(value = "/posts", consumes = "application/json")
     public ResponseEntity<Post> createPost(@RequestBody Post post) {
         postService.crearPost(post);
         return ResponseEntity.status(201).body(post);
