@@ -9,36 +9,37 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
-@RestController()
+@RestController
+@RequestMapping("/api/v1/users")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
-    @GetMapping("/users")
+    @GetMapping()
     public List<User> getAllUsers() {
         return userService.getAllUsers();
     }
 
-    @PostMapping(value = "/users", consumes = "application/json")
+    @PostMapping(consumes = "application/json")
     public ResponseEntity<User> createUser(@RequestBody User user) {
         User newUser = userService.createUser(user);
          return ResponseEntity.status(201).body(newUser);
     }
 
-    @GetMapping("/users/{id}")
-    public User findUser(@PathVariable Integer id) throws Exception {
+    @GetMapping("/{id}")
+    public User findUser(@PathVariable Integer id) {
         return userService.findUserById(id);
     }
 
-    @PutMapping("/users")
+    @PutMapping()
     public ResponseEntity<User> updateUser(@RequestBody User user)  {
         userService.updateUser(user);
         return ResponseEntity.status(201).body(user);
     }
 
-    @DeleteMapping("/users/{id}")
-    public void deleteUser(Integer id){
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable Integer id){
         userService.deleteUser(id);
     }
 
