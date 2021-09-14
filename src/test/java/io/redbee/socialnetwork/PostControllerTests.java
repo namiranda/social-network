@@ -23,32 +23,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest
 public class PostControllerTests {
 
-    @Autowired
-    MockMvc mockMvc;
-
-    @InjectMocks
-    PostService postService;
-
-    @BeforeEach
-    void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(postService).build();
-    }
-
-    @Test
-    void testAgregarPost() throws Exception {
-
-        Post post = new Post(15,9, "Hola","CREATED", LocalDateTime.of(2021,10, 12, 1,1), "noe", LocalDateTime.of(2021,10, 12, 1,1), "noe" );
-
-       // Mockito.when(postService.crearPost(post)).thenReturn(post);
-
-        ObjectMapper mapper = new ObjectMapper();
-        String jsonBody = mapper.writeValueAsString(post);
-        this.mockMvc.perform(MockMvcRequestBuilders.post("/posts/new")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .content(String.valueOf(new Post(15,9, "Hola","CREATED", LocalDateTime.of(2021,10, 12, 1,1), "noe", LocalDateTime.of(2021,10, 12, 1,1), "noe" ))))
-                .andExpect(status().is(201))
-                .andDo(print());
-
-    }
+  
 
 }

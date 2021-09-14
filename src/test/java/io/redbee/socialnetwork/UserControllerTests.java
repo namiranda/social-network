@@ -43,50 +43,5 @@ import java.util.List;
 @ContextConfiguration
 class UserControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Mock
-    UserService userService;
-
-    @InjectMocks
-    UserController userController;
-
-    List<User> users;
-    User user;
-
-    @BeforeEach
-    void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
-    }
-
-    @Test
-    public void getAllUsers() throws Exception {
-       users = new ArrayList<>();
-       users.add(new User(1,"noe@gmail", "adejnafwf", "CREATED", LocalDateTime.now(), "system", LocalDateTime.now(), "system"));
-       users.add(new User(2,"otro@gmail", "adejntwf", "CREATED", LocalDateTime.now(), "system", LocalDateTime.now(), "system"));
-
-       when(userService.getAllUsers()).thenReturn(users);
-
-       this.mockMvc.perform(MockMvcRequestBuilders.get("/users"))
-               .andExpect(status().isOk())
-               .andDo(print());
-
-    }
-
-    @Test
-    void testAgregarUser() throws Exception {
-
-        User user = new User(1,"noe@gmail", "adejnafwf", "CREATED", LocalDateTime.of(2021,10, 12, 1,1), "noe", LocalDateTime.of(2021,10, 12, 1,1), "noe" );
-
-        when(userService.createUser(user)).thenReturn(user);
-
-        ObjectMapper mapper = new ObjectMapper();
-        String jsonBody = mapper.writeValueAsString(user);
-        this.mockMvc.perform(MockMvcRequestBuilders.post("/posts/new")
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .content(jsonBody))
-                .andExpect(status().is(201))
-                .andDo(print());
-    }
+    
 }
