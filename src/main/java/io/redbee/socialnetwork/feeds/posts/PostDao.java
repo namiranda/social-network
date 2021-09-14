@@ -6,11 +6,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.ResourceAccessException;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 @Component
@@ -46,22 +49,28 @@ public class PostDao {
             "    modification_user  = :modification_user " +
             "WHERE id = :id";
 
-    public void save(Post post) {
+    public Optional<Post> save(Post post) {
         try {
-            template.update(insertQuery, postToParamSource(post));
+            KeyHolder keyHolder = new GeneratedKeyHolder();
+            template.update(insertQuery, postToParamSource(post), keyHolder);
             LOGGER.info("save: post from user {} saved", post.getUserId());
+
+            int id = (int) Objects.requireNonNull(keyHolder.getKeys().get("id"));
+            return this.getById(id);
         } catch (Exception e) {
             LOGGER.info("save: error {} saving post from user {}", e.getMessage(), post.getUserId());
+            throw new RepositoryException();
         }
     }
 
-    public void update(Post post) {
+    public Post update(Post post) {
         try {
             template.update(updateQuery, postToParamSource(post));
             LOGGER.info("update: post {} updated", post.getId());
         } catch (Exception e) {
             LOGGER.info("update: error {} updating post {}", e.getMessage(), post.getId());
         }
+        return post;
     }
 
     public List<Post> get() {
