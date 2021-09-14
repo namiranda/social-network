@@ -104,20 +104,16 @@ public class PostDao {
         }
     }
 
-    public Optional<Post> getByUserId(Integer userId) {
+    public List<Post> getByUserId(Integer userId) {
         try {
-            Optional<Post> result = Optional.ofNullable(
-                    template.queryForObject(
+            List<Post> result =
+                    template.query(
                             getQuery + " WHERE user_id = :user_id",
                             Map.of("user_id", userId),
                             new PostRowMapper()
-                    )
-            );
+                    );
             LOGGER.info("getByUserId: post found: {}", result);
             return result;
-        } catch (ResourceAccessException e) {
-            LOGGER.info("getByUserId: post with user id {} not found", userId);
-            return Optional.empty();
         } catch (DataAccessException e) {
             LOGGER.info("getByUserId: error {} searching post with user id: {}", e.getMessage(), userId);
             throw new RepositoryException();
