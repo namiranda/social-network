@@ -1,33 +1,19 @@
 package io.redbee.socialnetwork.users;
 
-import java.io.Serializable;
+import lombok.Builder;
+import lombok.Data;
 
-public class UserResponse implements Serializable {
+
+@Data
+@Builder(toBuilder = true)
+public class UserResponse {
     Integer id;
     String mail;
     String status;
 
-    public void setId(Integer id) {
+    public UserResponse(Integer id, String mail, String status) {
         this.id = id;
-    }
-
-    public void setMail(String mail) {
         this.mail = mail;
-    }
-
-    public void setStatus(String status) {
         this.status = status;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public String getMail() {
-        return mail;
-    }
-
-    public String getStatus() {
-        return status;
     }
 }

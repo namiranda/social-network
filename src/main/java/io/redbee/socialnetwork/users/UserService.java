@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -29,9 +30,20 @@ public class UserService {
         });
     }
 
-    public User updateUser(User user) {
-       userDao.update(user);
-       return userDao.getById(user.getId()).orElseThrow();
+    public User updateUser(User user, Integer id) {
+        User toUpdate = userDao.getById(id).orElseThrow();
+        User updated = User.builder()
+                .id(id)
+                .mail(user.getMail())
+                .encryptedPassword(toUpdate.getEncryptedPassword())
+                .status(toUpdate.getStatus())
+                .creationDate(toUpdate.getCreationDate())
+                .creationUser(toUpdate.getCreationUser())
+                .modificationDate(LocalDateTime.now())
+                .modificationUser("System")
+                .build();
+
+      return userDao.update(updated);
     }
     public User deleteUser(Integer userId){
         return userDao.getById(userId)

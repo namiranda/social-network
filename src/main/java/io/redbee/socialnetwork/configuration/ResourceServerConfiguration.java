@@ -36,10 +36,6 @@ public class ResourceServerConfiguration extends WebSecurityConfigurerAdapter {
         this.objectMapper = objectMapper;
     }
 
-    @Bean
-    public ModelMapper modelMapper(){ //esto lo mandé aca pq no sabia donde ponerlo
-        return new ModelMapper();
-    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
