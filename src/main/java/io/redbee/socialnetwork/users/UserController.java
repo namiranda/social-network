@@ -1,46 +1,61 @@
 package io.redbee.socialnetwork.users;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+    private final ModelMapper modelMapper;
 
-    @GetMapping()
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    public UserController(UserService userService, ModelMapper modelMapper) {
+        this.userService = userService;
+        this.modelMapper = modelMapper;
     }
 
-    @PostMapping(consumes = "application/json")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    @GetMapping()
+    @ResponseStatus(HttpStatus.OK)
+    public List<UserResponse> getAllUsers() {
+        List<User> users = userService.getAllUsers();
+        return users.stream()
+                .map(user -> modelMapper.map(user, UserResponse.class))
+                .collect(Collectors.toList());
+    }
+
+    @PostMapping()
+    @ResponseStatus(HttpStatus.CREATED)
+    public UserResponse createUser(@RequestBody User user) {
         User newUser = userService.createUser(user);
-         return ResponseEntity.status(201).body(newUser);
+         return modelMapper.map(newUser, UserResponse.class);
     }
 
     @GetMapping("/{id}")
-    public User findUser(@PathVariable Integer id) {
-        return userService.findUserById(id);
+    @ResponseStatus(HttpStatus.OK)
+    public UserResponse findUser(@PathVariable Integer id) {
+        User user = userService.findUserById(id);
+        return modelMapper.map(user, UserResponse.class);
     }
 
     @PutMapping()
-    public ResponseEntity<User> updateUser(@RequestBody User user)  {
-        userService.updateUser(user);
-        return ResponseEntity.status(201).body(user);
+    @ResponseStatus(HttpStatus.OK)
+    public UserResponse updateUser(@RequestBody User user)  {
+       User updatedUser = userService.updateUser(user);
+        return modelMapper.map(updatedUser, UserResponse.class);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Integer id){
-        userService.deleteUser(id);
+    @ResponseStatus(HttpStatus.OK)
+    public UserResponse deleteUser(@PathVariable Integer id){
+      User deletedUser = userService.deleteUser(id);
+      return modelMapper.map(deletedUser, UserResponse.class);
     }
 
 

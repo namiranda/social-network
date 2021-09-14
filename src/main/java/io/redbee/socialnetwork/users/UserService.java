@@ -31,10 +31,12 @@ public class UserService {
 
     public User updateUser(User user) {
        userDao.update(user);
-       return userDao.getById(user.getId()).get();
+       return userDao.getById(user.getId()).orElseThrow();
     }
-    public void deleteUser(Integer userId){
-        userDao.getById(userId).ifPresent(user->updateUser(user.withStatus(Status.DELETED.name())));
+    public User deleteUser(Integer userId){
+        return userDao.getById(userId)
+                .map(user -> userDao.update(user.withStatus(Status.DELETED.name())))
+                .orElseThrow();
     }
 
 
