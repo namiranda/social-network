@@ -1,11 +1,13 @@
 package io.redbee.socialnetwork.users;
 
+import io.redbee.socialnetwork.users.enums.Status;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -17,25 +19,24 @@ public class UserService {
         return userDao.get();
     }
 
-
     public User createUser(User user) {
         return this.userDao.save(user).orElseThrow();
     }
 
-    public User findUserById(Integer id) throws Exception {
-        Optional<User> userOp = userDao.getById(id);
-        if(userOp.isPresent()){
-            return userOp.get();
-        }else {
-            throw  new Exception("User not found??");
-        }
+    public User findUserById(Integer id) {
+        return  userDao.getById(id).orElseThrow(() -> {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        });
     }
 
-    public void updateUser(User user) {
+    public User updateUser(User user) {
        userDao.update(user);
+       return userDao.getById(user.getId()).orElseThrow();
     }
-    public void deleteUser(Integer userId){
-       // userDao.getById(userId).ifPresent(user->updateUser(user.withStatus("DELETED")));
+    public User deleteUser(Integer userId){
+        return userDao.getById(userId)
+                .map(user -> userDao.update(user.withStatus(Status.DELETED.name())))
+                .orElseThrow();
     }
 
 
