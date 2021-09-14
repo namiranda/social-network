@@ -8,8 +8,8 @@ public class PostService {
     @Autowired
     PostDao postDao;
 
-    public void crearPost(Post post){
-        postDao.save(post);
+    public Post crearPost(Post post){
+        return postDao.save(post).orElseThrow();
     }
 
 }
